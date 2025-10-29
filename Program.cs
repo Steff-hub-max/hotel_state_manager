@@ -1,7 +1,21 @@
 ﻿using App;
 
+List<string> bookedRooms = new List<string>();
+List<string> freeRooms = new List<string>();
 List<User> users = new List<User>();
-users.Add(new User("a", "a"));
+string[] lines = File.ReadAllLines("Users.csv");
+foreach (string line in lines)
+{
+    string[] userData = line.Split(',');
+
+    string name = userData[0];
+    string password = userData[1];
+
+    User user = new(name, password);
+
+    users.Add(user);
+}
+
 User? active_user = null;
 bool running = true;
 while (running)
@@ -36,8 +50,13 @@ while (running)
             case "closed":
                 break;
             case "logout":
+                active_user = null;
                 break;
             case "quit":
+                running = false;
+                break;
+            default:
+                Console.WriteLine("You must enter a valid command.");
                 break;
         }
     }
