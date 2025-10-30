@@ -42,17 +42,17 @@ while (running)
         catch { }
         Console.WriteLine($"--Hotel State Manager--");
         Console.WriteLine($"welcome {active_user.Name}. Please type what you want to do.\n\n");
-        Console.WriteLine("full - list of all booked rooms");
-        Console.WriteLine("empty - list of all empty rooms");
-        Console.WriteLine("new - book a guest to a room");
-        Console.WriteLine("checkout - checkout a guest from a room");
-        Console.WriteLine("closed - mark a room as unavailable");
-        Console.WriteLine("logout - logout from this session");
-        Console.WriteLine("quit - exit the program\n\n");
+        Console.WriteLine("1 - list of all Occupied rooms.");
+        Console.WriteLine("2 - list of all Available rooms");
+        Console.WriteLine("3 - book a guest to a room");
+        Console.WriteLine("4 - checkout a guest from a room");
+        Console.WriteLine("5 - mark a room as unavailable");
+        Console.WriteLine("l - logout from this session");
+        Console.WriteLine("q - exit the program\n\n");
         Console.Write("Enter command: ");
         switch (Console.ReadLine())
         {
-            case "full":
+            case "1":
                 Console.WriteLine("Here is a list of all available rooms: ");
                 foreach (Room room in rooms)
                 {
@@ -63,9 +63,10 @@ while (running)
                         );
                     }
                 }
+                Console.WriteLine("Press ENTER to continue.");
                 Console.ReadLine();
                 break;
-            case "empty":
+            case "2":
                 Console.WriteLine("Here is a list of all available rooms: ");
                 foreach (Room room in rooms)
                 {
@@ -76,13 +77,47 @@ while (running)
                         );
                     }
                 }
+                Console.WriteLine("Press ENTER to continue.");
                 Console.ReadLine();
                 break;
-            case "new":
+            case "3":
+                foreach (Room room in rooms)
+                {
+                    if (room.RoomStatus == Status.Available)
+                        Console.WriteLine(
+                            $"Room: {room.RoomNumber} Current guest: {room.Guest} Status: {room.RoomStatus}"
+                        );
+                }
+                Console.WriteLine(
+                    "Enter the room you want to change, type DONE to go back to menu:"
+                );
+                string? user_new = Console.ReadLine();
+                if (user_new?.ToLower() == "done")
+                {
+                    break;
+                }
+                if (int.TryParse(user_new, out int result))
+                {
+                    foreach (Room room in rooms)
+                    {
+                        if (room.RoomNumber == result)
+                        {
+                            Console.WriteLine("Enter the name of the new guest");
+                            Console.Write("Name:");
+                            room.Guest = Console.ReadLine()!;
+                            room.RoomStatus = Status.Occupied;
+                            Console.WriteLine(
+                                $"Your guest {room.Guest} is now booked to room: {room.RoomNumber}"
+                            );
+                            Console.WriteLine("Press ENTER to go back to menu");
+                            Console.ReadLine();
+                        }
+                    }
+                }
                 break;
-            case "checkout":
+            case "4":
                 break;
-            case "closed":
+            case "5":
                 bool closed = true;
                 while (closed)
                 {
@@ -124,10 +159,10 @@ while (running)
                 }
 
                 break;
-            case "logout":
+            case "l":
                 active_user = null;
                 break;
-            case "quit":
+            case "q":
                 running = false;
                 break;
             default:
