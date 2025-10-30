@@ -19,10 +19,11 @@ foreach (string line in roomlines)
 {
     string[] userData = line.Split(',');
 
-    string roomnumber = userData[0];
+    string number = userData[0];
     string guest = userData[1];
     Status roomStatus = Enum.Parse<Status>(userData[2]);
-
+    int roomnumber;
+    int.TryParse(number, out roomnumber);
     Room room = new(roomnumber, guest, roomStatus);
 
     rooms.Add(room);
@@ -57,7 +58,9 @@ while (running)
                 {
                     if (room.RoomStatus == Status.Occupied)
                     {
-                        Console.WriteLine(room.RoomNumber + room.Guest + room.RoomStatus);
+                        Console.WriteLine(
+                            $"Room: {room.RoomNumber} Current guest: {room.Guest} Status: {room.RoomStatus}"
+                        );
                     }
                 }
                 Console.ReadLine();
@@ -80,6 +83,46 @@ while (running)
             case "checkout":
                 break;
             case "closed":
+                bool closed = true;
+                while (closed)
+                {
+                    try
+                    {
+                        Console.Clear();
+                    }
+                    catch { }
+                    foreach (Room room in rooms)
+                    {
+                        Console.WriteLine($"Room: {room.RoomNumber} Status: {room.RoomStatus}");
+                    }
+                    Console.WriteLine(
+                        "Enter the room you want to change, type DONE to go back to menu:"
+                    );
+                    string? user_input = Console.ReadLine();
+                    if (user_input?.ToLower() == "done")
+                    {
+                        closed = false;
+                        continue;
+                    }
+                    if (int.TryParse(user_input, out int input))
+                    {
+                        foreach (Room room in rooms)
+                        {
+                            if (room.RoomNumber == input)
+                            {
+                                if (room.RoomStatus == Status.Available)
+                                {
+                                    room.RoomStatus = Status.Unavailable;
+                                }
+                                else if (room.RoomStatus == Status.Unavailable)
+                                {
+                                    room.RoomStatus = Status.Available;
+                                }
+                            }
+                        }
+                    }
+                }
+
                 break;
             case "logout":
                 active_user = null;

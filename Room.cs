@@ -2,11 +2,11 @@ namespace App;
 
 class Room
 {
-    public string RoomNumber;
+    public int RoomNumber;
     public string Guest;
     public Status RoomStatus;
 
-    public Room(string roomNumber, string guest, Status roomStatus)
+    public Room(int roomNumber, string guest, Status roomStatus)
     {
         RoomNumber = roomNumber;
         Guest = guest;
