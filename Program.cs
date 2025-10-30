@@ -116,6 +116,38 @@ while (running)
                 }
                 break;
             case "4":
+                foreach (Room room in rooms)
+                {
+                    if (room.RoomStatus == Status.Occupied)
+                        Console.WriteLine(
+                            $"Room: {room.RoomNumber} Current guest: {room.Guest} Status: {room.RoomStatus}"
+                        );
+                }
+                Console.WriteLine(
+                    "Enter the room you want to change, type DONE to go back to menu:"
+                );
+                string? user_out = Console.ReadLine();
+                if (user_out?.ToLower() == "done")
+                {
+                    break;
+                }
+                if (int.TryParse(user_out, out int out_result))
+                {
+                    foreach (Room room in rooms)
+                    {
+                        if (room.RoomNumber == out_result)
+                        {
+                            room.Guest = "none";
+                            room.RoomStatus = Status.Available;
+                            Console.WriteLine(
+                                $"Your guest has succesfully checked out from room: {room.RoomNumber}."
+                            );
+                            Console.WriteLine("Press ENTER to go back to menu");
+                            Console.ReadLine();
+                        }
+                    }
+                }
+
                 break;
             case "5":
                 bool closed = true;
