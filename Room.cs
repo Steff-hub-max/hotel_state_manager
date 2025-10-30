@@ -12,6 +12,12 @@ class Room
         Guest = guest;
         RoomStatus = roomStatus;
     }
+
+    public string ToSaveString()
+    {
+        string result = $"{RoomNumber},{Guest},{RoomStatus},";
+        return result;
+    }
 }
 
 public enum Status

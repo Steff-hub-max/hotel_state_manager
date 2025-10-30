@@ -106,6 +106,7 @@ while (running)
                             Console.Write("Name:");
                             room.Guest = Console.ReadLine()!;
                             room.RoomStatus = Status.Occupied;
+                            SaveRoom(rooms, "Rooms.csv");
                             Console.WriteLine(
                                 $"Your guest {room.Guest} is now booked to room: {room.RoomNumber}"
                             );
@@ -139,6 +140,7 @@ while (running)
                         {
                             room.Guest = "none";
                             room.RoomStatus = Status.Available;
+                            SaveRoom(rooms, "Rooms.csv");
                             Console.WriteLine(
                                 $"Your guest has succesfully checked out from room: {room.RoomNumber}."
                             );
@@ -180,10 +182,12 @@ while (running)
                                 if (room.RoomStatus == Status.Available)
                                 {
                                     room.RoomStatus = Status.Unavailable;
+                                    SaveRoom(rooms, "Rooms.csv");
                                 }
                                 else if (room.RoomStatus == Status.Unavailable)
                                 {
                                     room.RoomStatus = Status.Available;
+                                    SaveRoom(rooms, "Rooms.csv");
                                 }
                             }
                         }
@@ -223,4 +227,13 @@ while (running)
             }
         }
     }
+}
+static void SaveRoom(List<Room> rooms, string path)
+{
+    string[] lines_to_save = new string[rooms.Count];
+    for (int i = 0; i < rooms.Count; ++i)
+    {
+        lines_to_save[i] = rooms[i].ToSaveString();
+    }
+    File.WriteAllLines(path, lines_to_save);
 }
