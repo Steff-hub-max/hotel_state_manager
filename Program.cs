@@ -1,7 +1,5 @@
 ﻿using App;
 
-List<string> bookedRooms = new List<string>();
-List<string> freeRooms = new List<string>();
 List<User> users = new List<User>();
 string[] lines = File.ReadAllLines("Users.csv");
 foreach (string line in lines)
@@ -14,6 +12,20 @@ foreach (string line in lines)
     User user = new(name, password);
 
     users.Add(user);
+}
+List<Room> rooms = new List<Room>();
+string[] roomlines = File.ReadAllLines("Rooms.csv");
+foreach (string line in roomlines)
+{
+    string[] userData = line.Split(',');
+
+    string roomnumber = userData[0];
+    string guest = userData[1];
+    Status roomStatus = Enum.Parse<Status>(userData[2]);
+
+    Room room = new(roomnumber, guest, roomStatus);
+
+    rooms.Add(room);
 }
 
 User? active_user = null;
@@ -40,8 +52,28 @@ while (running)
         switch (Console.ReadLine())
         {
             case "full":
+                Console.WriteLine("Here is a list of all available rooms: ");
+                foreach (Room room in rooms)
+                {
+                    if (room.RoomStatus == Status.Occupied)
+                    {
+                        Console.WriteLine(room.RoomNumber + room.Guest + room.RoomStatus);
+                    }
+                }
+                Console.ReadLine();
                 break;
             case "empty":
+                Console.WriteLine("Here is a list of all available rooms: ");
+                foreach (Room room in rooms)
+                {
+                    if (room.RoomStatus == Status.Available)
+                    {
+                        Console.WriteLine(
+                            $"Room: {room.RoomNumber} Current guest: {room.Guest} Status: {room.RoomStatus}"
+                        );
+                    }
+                }
+                Console.ReadLine();
                 break;
             case "new":
                 break;
