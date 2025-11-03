@@ -1,5 +1,7 @@
 ﻿using App;
 
+//programmet laddar filer för användare och rum, samt splittar
+//raderna med komma, så listorna stämmer med hur programmet fungerar.
 List<User> users = new List<User>();
 string[] lines = File.ReadAllLines("Users.csv");
 foreach (string line in lines)
@@ -29,6 +31,10 @@ foreach (string line in roomlines)
     rooms.Add(room);
 }
 
+// här kommer en bool, som gör att om användaren inte är inloggad
+// skickas man till inloggningen. när man har loggat in,
+// sedan visas en meny, där man får välja vad man vill göra.
+
 User? active_user = null;
 bool running = true;
 while (running)
@@ -52,6 +58,8 @@ while (running)
         Console.Write("Enter command: ");
         switch (Console.ReadLine())
         {
+            // här loopar programmet igenom rummen, och jämför om status är occupied.
+            // om det är upptaget, visas rumsnummer, vem som är gäst där och statusen på rummet.
             case "1":
                 Console.WriteLine("Here is a list of all available rooms: ");
                 foreach (Room room in rooms)
@@ -66,6 +74,8 @@ while (running)
                 Console.WriteLine("Press ENTER to continue.");
                 Console.ReadLine();
                 break;
+
+            //här händer nästan samma sak, skillnaden är att den kollar efter tomma rum.
             case "2":
                 Console.WriteLine("Here is a list of all available rooms: ");
                 foreach (Room room in rooms)
@@ -81,6 +91,8 @@ while (running)
                 Console.ReadLine();
                 break;
             case "3":
+                // här får användaren först en lista över lediga rum, och får sedan skriva in vilket rum gästen
+                // ska bo i och namn på gästen. när användaren angett det, sparas det till fil.
                 foreach (Room room in rooms)
                 {
                     if (room.RoomStatus == Status.Available)
@@ -117,6 +129,8 @@ while (running)
                 }
                 break;
             case "4":
+                // Här kan användaren checka ut en gäst. Användaren får först en lista över upptagna rum
+                // och får välja vilket rum som ska checkas ut.
                 foreach (Room room in rooms)
                 {
                     if (room.RoomStatus == Status.Occupied)
@@ -152,6 +166,10 @@ while (running)
 
                 break;
             case "5":
+                //Här kan användaren välja att markera ett rum som otillgängligt genom
+                // att skriva in rumsnummret , det gör att
+                // det inte går att boka in en gäst på det rummet. användaren kan även välja att
+                // öppna rummet igen genom att ange ett redan otillgängligt rum.
                 bool closed = true;
                 while (closed)
                 {
